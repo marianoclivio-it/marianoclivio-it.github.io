@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mariano · IT & Infraestructura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f11;
+    --bg2: #141518;
+    --bg3: #1a1c20;
+    --border: #2a2d33;
+    --border2: #363a42;
+    --text: #e8e9eb;
+    --text2: #9499a3;
+    --text3: #5a5f6b;
+    --accent: #4ade80;
+    --accent2: #22c55e;
+    --accent-dim: rgba(74,222,128,0.08);
+    --accent-dim2: rgba(74,222,128,0.15);
+    --red: #f87171;
+    --red-dim: rgba(248,113,113,0.1);
+    --amber: #fbbf24;
+    --amber-dim: rgba(251,191,36,0.1);
+    --blue: #60a5fa;
+    --blue-dim: rgba(96,165,250,0.1);
+    --radius: 10px;
+    --mono: 'JetBrains Mono', monospace;
+    --serif: 'Instrument Serif', serif;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* LAYOUT */
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* VIEWS */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(14,15,17,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+  }
+  nav .inner {
+    max-width: 720px; margin: 0 auto; padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-brand {
+    font-family: var(--mono);
+    font-size: 13px; font-weight: 700;
+    color: var(--accent);
+    cursor: pointer;
+    letter-spacing: 0.02em;
+  }
+  .nav-brand span { color: var(--text3); font-weight: 400; }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a {
+    font-size: 13px; color: var(--text2);
+    transition: color 0.15s;
+    cursor: pointer;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* HERO */
+  .hero {
+    padding: 72px 0 56px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px; color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 20px; height: 1px;
+    background: var(--accent);
+  }
+  .hero-name {
+    font-family: var(--serif);
+    font-size: 52px;
+    line-height: 1.05;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .hero-name em { font-style: italic; color: var(--accent); }
+  .hero-role {
+    font-family: var(--mono);
+    font-size: 13px; color: var(--text3);
+    margin-bottom: 24px;
+  }
+  .hero-role strong { color: var(--text2); font-weight: 500; }
+  .hero-bio {
+    font-size: 15px; color: var(--text2);
+    max-width: 520px; line-height: 1.75;
+    margin-bottom: 28px;
+  }
+  .hero-tags {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    color: var(--text3);
+    transition: all 0.15s;
+    cursor: default;
+  }
+  .tag:hover { border-color: var(--accent); color: var(--accent); }
+  .tag.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: flex; gap: 32px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .stat { display: flex; flex-direction: column; gap: 2px; }
+  .stat-n {
+    font-family: var(--mono);
+    font-size: 22px; font-weight: 700;
+    color: var(--text);
+  }
+  .stat-l {
+    font-size: 11px; color: var(--text3);
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+
+  /* SECTION HEADER */
+  .section-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 40px 0 24px;
+  }
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px; color: var(--text3);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .section-line { flex: 1; height: 1px; background: var(--border); }
+
+  /* POST CARDS */
+  .posts-list { display: flex; flex-direction: column; gap: 1px; }
+
+  .post-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    margin-bottom: 12px;
+  }
+  .post-card:hover {
+    border-color: var(--border2);
+    background: var(--bg2);
+  }
+  .post-card-meta {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 12px;
+  }
+  .cat {
+    font-family: var(--mono);
+    font-size: 10px; font-weight: 700;
+    padding: 3px 8px; border-radius: 3px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .cat-security { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
+  .cat-linux { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(251,191,36,0.2); }
+  .cat-windows { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,165,250,0.2); }
+  .cat-redes { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(74,222,128,0.2); }
+
+  .post-date {
+    font-family: var(--mono);
+    font-size: 11px; color: var(--text3);
+  }
+  .post-card-title {
+    font-family: var(--serif);
+    font-size: 20px; line-height: 1.3;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .post-card-preview {
+    font-size: 13px; color: var(--text2); line-height: 1.7;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .post-card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .post-actions { display: flex; gap: 16px; }
+  .action {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 12px; color: var(--text3);
+    background: none; border: none; cursor: pointer;
+    font-family: var(--sans);
+    transition: color 0.15s;
+    padding: 0;
+  }
+  .action:hover { color: var(--text2); }
+  .action svg { width: 14px; height: 14px; }
+  .read-link {
+    font-family: var(--mono);
+    font-size: 11px; color: var(--accent);
+    display: flex; align-items: center; gap: 4px;
+    transition: gap 0.15s;
+  }
+  .post-card:hover .read-link { gap: 8px; }
+
+  /* POST DETAIL */
+  .post-detail { padding-bottom: 80px; }
+  .detail-back {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono);
+    font-size: 12px; color: var(--text3);
+    cursor: pointer;
+    padding: 40px 0 32px;
+    transition: color 0.15s;
+    background: none; border: none;
+  }
+  .detail-back:hover { color: var(--accent); }
+  .detail-back svg { width: 14px; height: 14px; }
+  .detail-header { margin-bottom: 32px; }
+  .detail-meta {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px;
+  }
+  .detail-title {
+    font-family: var(--serif);
+    font-size: 36px; line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .detail-byline {
+    font-family: var(--mono);
+    font-size: 12px; color: var(--text3);
+  }
+  .detail-lead {
+    font-size: 16px; color: var(--text2); line-height: 1.8;
+    border-left: 2px solid var(--accent);
+    padding-left: 20px;
+    margin: 28px 0;
+  }
+
+  /* ARTICLE BODY */
+  .article h2 {
+    font-family: var(--serif);
+    font-size: 22px; color: var(--text);
+    margin: 36px 0 14px;
+  }
+  .article p {
+    font-size: 15px; color: var(--text2);
+    line-height: 1.8; margin-bottom: 16px;
+  }
+  .article ul {
+    margin: 0 0 16px 0;
+    padding-left: 0;
+    list-style: none;
+  }
+  .article ul li {
+    font-size: 15px; color: var(--text2);
+    line-height: 1.7; padding: 5px 0 5px 20px;
+    position: relative;
+  }
+  .article ul li::before {
+    content: '→';
+    position: absolute; left: 0;
+    color: var(--accent); font-size: 12px;
+    top: 7px;
+  }
+  .article code {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 2px 6px; border-radius: 4px;
+    color: var(--accent);
+  }
+  .article pre {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin: 20px 0;
+    overflow-x: auto;
+  }
+  .article pre code {
+    background: none; border: none; padding: 0;
+    font-size: 13px; line-height: 1.6;
+    color: var(--text2);
+  }
+  .article .callout {
+    background: var(--accent-dim);
+    border: 1px solid rgba(74,222,128,0.2);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 14px; color: var(--text2);
+    line-height: 1.7;
+  }
+  .article .callout strong { color: var(--accent); }
+  .article .warn {
+    background: var(--red-dim);
+    border: 1px solid rgba(248,113,113,0.2);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 14px; color: var(--text2);
+  }
+  .article .warn strong { color: var(--red); }
+  .article hr {
+    border: none; border-top: 1px solid var(--border);
+    margin: 36px 0;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 0;
+    margin-top: 40px;
+  }
+  footer .inner {
+    max-width: 720px; margin: 0 auto; padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .footer-brand {
+    font-family: var(--mono);
+    font-size: 12px; color: var(--text3);
+  }
+  .footer-brand strong { color: var(--accent); }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a {
+    font-family: var(--mono);
+    font-size: 11px; color: var(--text3);
+    transition: color 0.15s;
+  }
+  .footer-links a:hover { color: var(--accent); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp 0.4s ease both; }
+  .fade-up-1 { animation-delay: 0.05s; }
+  .fade-up-2 { animation-delay: 0.1s; }
+  .fade-up-3 { animation-delay: 0.15s; }
+  .fade-up-4 { animation-delay: 0.2s; }
+  .fade-up-5 { animation-delay: 0.25s; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="inner">
+    <div class="nav-brand" onclick="showHome()">mariano<span>.dev</span></div>
+    <div class="nav-links">
+      <a onclick="showHome()">Inicio</a>
+      <a onclick="scrollToPosts()">Posts</a>
+      <a href="mailto:mgclivio@gmail.com">Contacto</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HOME VIEW -->
+<div id="view-home" class="view active">
+  <div class="container">
+
+    <section class="hero">
+      <div class="hero-eyebrow fade-up">IT Infrastructure · Buenos Aires</div>
+      <h1 class="hero-name fade-up fade-up-1">Mariano<br><em>Clivio</em></h1>
+      <div class="hero-role fade-up fade-up-2">
+        IT Infrastructure Technician @ <strong>Reportv</strong>
+      </div>
+      <p class="hero-bio fade-up fade-up-3">
+        Técnico en Infraestructura IT con más de dos años en el rol y un largo recorrido en soporte técnico nivel 2. Licenciatura en Sistemas. Escribo sobre lo que aprendo y uso todos los días: servidores, ciberseguridad, Linux, Windows Server y Active Directory.
+      </p>
+      <div class="hero-tags fade-up fade-up-4">
+        <span class="tag active">Linux</span>
+        <span class="tag active">Windows Server</span>
+        <span class="tag active">Active Directory</span>
+        <span class="tag">Ciberseguridad</span>
+        <span class="tag">PowerShell</span>
+        <span class="tag">Bash</span>
+        <span class="tag">Virtualización</span>
+        <span class="tag">Redes</span>
+      </div>
+    </section>
+
+    <div class="stats-bar fade-up fade-up-5">
+      <div class="stat">
+        <span class="stat-n">3</span>
+        <span class="stat-l">Posts</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">15+</span>
+        <span class="stat-l">Años en el rol</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">N2</span>
+        <span class="stat-l">Soporte técnico</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">∞</span>
+        <span class="stat-l">Tickets cerrados</span>
+      </div>
+    </div>
+
+    <div class="section-header" id="posts-section">
+      <span class="section-label">// posts recientes</span>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="posts-list">
+
+      <div class="post-card" onclick="showPost('phishing')">
+        <div class="post-card-meta">
+          <span class="cat cat-security">Ciberseguridad</span>
+          <span class="post-date">23 may 2025</span>
+        </div>
+        <div class="post-card-title">Phishing e ingeniería social: cómo funciona y cómo no caer</div>
+        <div class="post-card-preview">El 90% de los ataques exitosos empieza con un mail, un mensaje o una llamada. No con un exploit sofisticado. La ingeniería social sigue siendo el vector más efectivo porque apunta al eslabón más difícil de parchear: la persona.</div>
+        <div class="post-card-footer">
+          <div class="post-actions">
+            <button class="action">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              24
+            </button>
+            <button class="action">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              5
+            </button>
+          </div>
+          <span class="read-link">leer →</span>
+        </div>
+      </div>
+
+      <div class="post-card" onclick="showPost('ubuntu')">
+        <div class="post-card-meta">
+          <span class="cat cat-linux">Linux</span>
+          <span class="post-date">15 may 2025</span>
+        </div>
+        <div class="post-card-title">Hardening básico de Ubuntu Server: checklist para producción</div>
+        <div class="post-card-preview">Cuando levantás un servidor Ubuntu recién instalado, el 80% del trabajo de seguridad está en la configuración inicial. SSH key-only, fail2ban, ufw, usuarios sin contraseña root y más.</div>
+        <div class="post-card-footer">
+          <div class="post-actions">
+            <button class="action">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              41
+            </button>
+            <button class="action">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              9
+            </button>
+          </div>
+          <span class="read-link">leer →</span>
+        </div>
+      </div>
+
+      <div class="post-card" onclick="showPost('gpo')">
+        <div class="post-card-meta">
+          <span class="cat cat-windows">Windows / AD</span>
+          <span class="post-date">8 may 2025</span>
+        </div>
+        <div class="post-card-title">GPOs que toda empresa debería tener (y que pocas tienen)</div>
+        <div class="post-card-preview">Active Directory es poderoso, pero Group Policy es donde realmente tomás control del entorno. Política de contraseñas, bloqueo de USB, restricción de scripts y auditoría de eventos críticos.</div>
+        <div class="post-card-footer">
+          <div class="post-actions">
+            <button class="action">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              67
+            </button>
+            <button class="action">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              14
+            </button>
+          </div>
+          <span class="read-link">leer →</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <div class="inner">
+      <div class="footer-brand">mariano<strong>.dev</strong> · IT & Infraestructura</div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/marianoclivio/" target="_blank">LinkedIn</a>
+        <a href="https://github.com" target="_blank">GitHub</a>
+        <a href="mailto:mgclivio@gmail.com">Email</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- POST DETAIL VIEW -->
+<div id="view-post" class="view">
+  <div class="container">
+    <button class="detail-back" onclick="showHome()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      volver a posts
+    </button>
+    <div id="post-content"></div>
+  </div>
+  <footer>
+    <div class="inner">
+      <div class="footer-brand">mariano<strong>.dev</strong> · IT & Infraestructura</div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/marianoclivio/" target="_blank">LinkedIn</a>
+        <a href="https://github.com" target="_blank">GitHub</a>
+        <a href="mailto:mgclivio@gmail.com">Email</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+const posts = {
+  phishing: {
+    cat: 'cat-security', catLabel: 'Ciberseguridad',
+    date: '23 may 2025', readTime: '6 min',
+    title: 'Phishing e ingeniería social: cómo funciona y cómo no caer',
+    lead: 'El 90% de los ataques exitosos empieza con un mail, un mensaje o una llamada. No con un exploit sofisticado. La ingeniería social sigue siendo el vector más efectivo porque apunta al eslabón más difícil de parchear: la persona.',
+    body: `
+      <h2>¿Qué es la ingeniería social?</h2>
+      <p>Es la manipulación psicológica de personas para que realicen una acción o revelen información que no deberían. El atacante no "rompe" sistemas técnicos: convence a la gente de que lo deje pasar. Puede ser un mail, una llamada telefónica, un SMS o incluso alguien en persona.</p>
+      <p>El phishing es el tipo más común: un mensaje diseñado para hacerte creer que viene de una fuente confiable (tu banco, Microsoft, tu jefe) para robarte credenciales, datos o hacerte ejecutar algo malicioso.</p>
+
+      <h2>Tipos más frecuentes</h2>
+      <ul>
+        <li><strong>Phishing masivo:</strong> miles de mails iguales enviados al azar. Suelen imitar bancos o servicios de pago. Baja personalización, alto volumen.</li>
+        <li><strong>Spear phishing:</strong> el mail está personalizado para vos o tu organización. El atacante investigó tu nombre, tu rol, tu empresa. Mucho más difícil de detectar.</li>
+        <li><strong>Vishing:</strong> una llamada donde alguien se hace pasar por soporte técnico o el banco. Piden que instales algo o confirmes datos con urgencia.</li>
+        <li><strong>Smishing:</strong> SMS con un link falso. Muy común con temáticas de envíos de correo, AFIP o premios. El link lleva a una página que roba datos.</li>
+      </ul>
+
+      <h2>Las señales de alerta que siempre aparecen</h2>
+      <p>Con el tiempo uno aprende a detectarlos casi de manera automática. Pero los que empiezan suelen caer en los mismos trucos:</p>
+      <ul>
+        <li><strong>Urgencia extrema:</strong> "Tenés 24hs", "acción inmediata requerida". La presión de tiempo te impide pensar con calma.</li>
+        <li><strong>Dominio sospechoso:</strong> el remitente usa dominios parecidos al real: <code>micr0soft</code>, <code>paypa1</code>, <code>banco-hsbc-arg.com</code>.</li>
+        <li><strong>Links que no coinciden:</strong> el texto dice "microsoft.com" pero al pasar el mouse el link real es otro.</li>
+        <li><strong>Adjuntos inesperados:</strong> un <code>.zip</code>, <code>.docm</code> o <code>.exe</code> que no pediste. El malware suele entrar por acá.</li>
+        <li><strong>Pedido de credenciales:</strong> ningún sistema legítimo te va a pedir usuario y contraseña por mail.</li>
+        <li><strong>Redacción extraña:</strong> errores ortográficos, frases raras, traducciones automáticas evidentes.</li>
+      </ul>
+
+      <h2>Ejemplo real de phishing</h2>
+      <p>Este es un patrón clásico de mail malicioso que imita a Microsoft:</p>
+      <pre><code>De: soporte@micr0soft-ayuda.com     ← dominio falso (0 en lugar de o)
+Asunto: ⚠ Tu cuenta será suspendida en 24 horas
+
+Estimado usuario,
+Detectamos actividad sospechosa en tu cuenta Microsoft 365.
+Para evitar la suspensión, debés verificar tu identidad
+ANTES de las 24 horas.
+
+[Verificar mi cuenta →]     ← link que no va a microsoft.com
+
+Si no completás este proceso, tu cuenta quedará bloqueada
+sin posibilidad de recuperación.</code></pre>
+
+      <div class="warn"><strong>Señales de alerta en ese mail:</strong> dominio con "0" en lugar de "o", urgencia de 24 horas, amenaza de pérdida permanente, link a dominio desconocido.</div>
+
+      <h2>Qué hacer para protegerte</h2>
+      <ul>
+        <li>Siempre verificá el dominio del remitente antes de hacer clic en cualquier link.</li>
+        <li>Activá MFA en todas las cuentas críticas. Si te roban la contraseña, no alcanza.</li>
+        <li>Ante la duda, no hagas clic: escribí la URL directamente en el navegador.</li>
+        <li>En un entorno corporativo, reportá siempre los mails sospechosos al área de IT.</li>
+        <li>Hacé simulacros de phishing con herramientas como GoPhish. La concientización es la defensa más efectiva.</li>
+        <li>Configurá DMARC/DKIM/SPF en el servidor de correo para reducir el volumen de mails maliciosos.</li>
+      </ul>
+
+      <div class="callout"><strong>Para recordar:</strong> la tecnología puede ayudar, pero el factor humano sigue siendo el más crítico. Capacitar a las personas que trabajan con vos vale más que cualquier firewall.</div>
+    `
+  },
+  ubuntu: {
+    cat: 'cat-linux', catLabel: 'Linux',
+    date: '15 may 2025', readTime: '8 min',
+    title: 'Hardening básico de Ubuntu Server: checklist para producción',
+    lead: 'Cuando levantás un servidor Ubuntu recién instalado, el 80% del trabajo de seguridad está en la configuración inicial. Acá comparto la checklist que uso antes de poner cualquier servidor en producción.',
+    body: `
+      <h2>¿Por qué hardening desde el día uno?</h2>
+      <p>Un Ubuntu Server recién instalado tiene configuraciones pensadas para ser compatibles, no para ser seguras. El usuario root está habilitado, SSH acepta contraseñas, no hay firewall activo. Cualquier servicio expuesto a internet en ese estado es un blanco fácil.</p>
+      <p>El hardening no es una tarea de una vez: es una serie de configuraciones que reducen la superficie de ataque desde el principio.</p>
+
+      <h2>1. Actualizar el sistema primero</h2>
+      <pre><code>apt update && apt upgrade -y
+apt autoremove -y</code></pre>
+      <p>Siempre lo primero. No tiene sentido configurar seguridad sobre un sistema con vulnerabilidades conocidas.</p>
+
+      <h2>2. Crear un usuario no root y deshabilitar root</h2>
+      <pre><code>adduser mariano
+usermod -aG sudo mariano</code></pre>
+      <p>Nunca trabajar como root directamente. Una vez que confirmás que el nuevo usuario tiene acceso sudo, deshabilitás el login de root:</p>
+      <pre><code># En /etc/passwd, cambiar la shell de root:
+root:x:0:0:root:/root:/usr/sbin/nologin</code></pre>
+
+      <h2>3. SSH: solo con claves, sin contraseñas</h2>
+      <p>Primero copiás tu clave pública al servidor:</p>
+      <pre><code>ssh-copy-id mariano@ip-del-servidor</code></pre>
+      <p>Luego editás <code>/etc/ssh/sshd_config</code>:</p>
+      <pre><code>PermitRootLogin no
+PasswordAuthentication no
+PubkeyAuthentication yes
+Port 2222           # cambiar el puerto por defecto</code></pre>
+
+      <h2>4. Firewall con UFW</h2>
+      <pre><code>ufw default deny incoming
+ufw default allow outgoing
+ufw allow 2222/tcp    # SSH en el puerto nuevo
+ufw allow 80/tcp      # HTTP si aplica
+ufw allow 443/tcp     # HTTPS si aplica
+ufw enable</code></pre>
+
+      <h2>5. Fail2ban contra ataques de fuerza bruta</h2>
+      <pre><code>apt install fail2ban -y
+systemctl enable fail2ban
+systemctl start fail2ban</code></pre>
+      <p>La configuración por defecto ya protege SSH. Para ajustar los tiempos de ban editás <code>/etc/fail2ban/jail.local</code>.</p>
+
+      <h2>6. Actualizaciones automáticas de seguridad</h2>
+      <pre><code>apt install unattended-upgrades -y
+dpkg-reconfigure --priority=low unattended-upgrades</code></pre>
+
+      <div class="callout"><strong>Checklist rápida:</strong> sistema actualizado → usuario no root → SSH con clave → puerto SSH cambiado → UFW activo → fail2ban instalado → actualizaciones automáticas. Con esto cubrís el 90% de los vectores básicos.</div>
+
+      <hr>
+      <p>En el próximo post voy a cubrir monitoring básico con Netdata y alertas por mail cuando algo se va al diablo. Si te quedó alguna duda, mandame un mensaje.</p>
+    `
+  },
+  gpo: {
+    cat: 'cat-windows', catLabel: 'Windows / AD',
+    date: '8 may 2025', readTime: '7 min',
+    title: 'GPOs que toda empresa debería tener (y que pocas tienen)',
+    lead: 'Active Directory es poderoso, pero Group Policy es donde realmente tomás control del entorno. Acá repaso las GPOs que aplico siempre y que, sorprendentemente, la mayoría de las organizaciones no tienen configuradas.',
+    body: `
+      <h2>¿Por qué importa tanto la Group Policy?</h2>
+      <p>AD sin GPO bien configuradas es como tener una puerta blindada sin llave. Podés tener el mejor hardware del mundo, pero si un usuario puede instalar cualquier cosa o conectar un USB con malware, el riesgo es enorme.</p>
+      <p>Las GPOs permiten aplicar configuraciones de seguridad y comportamiento a usuarios y equipos de forma centralizada, sin tocar cada máquina.</p>
+
+      <h2>1. Política de contraseñas robusta</h2>
+      <p>La política por defecto de AD es ridículamente permisiva. Mínimo lo que deberían tener:</p>
+      <ul>
+        <li>Longitud mínima: 12 caracteres</li>
+        <li>Complejidad habilitada (mayúsculas, minúsculas, números, símbolos)</li>
+        <li>Historial de contraseñas: últimas 10</li>
+        <li>Edad máxima: 90 días</li>
+        <li>Bloqueo de cuenta tras 5 intentos fallidos</li>
+      </ul>
+      <p>Se configura en: <code>Computer Config → Policies → Windows Settings → Security Settings → Account Policies</code></p>
+
+      <h2>2. Bloqueo de dispositivos USB</h2>
+      <p>Uno de los vectores de entrada de malware más comunes sigue siendo el USB. Con una GPO podés bloquearlo completamente o solo permitir ciertos dispositivos:</p>
+      <pre><code>Computer Config → Policies → Admin Templates
+  → System → Removable Storage Access
+  → All Removable Storage classes: Deny all access</code></pre>
+
+      <div class="warn"><strong>Atención:</strong> antes de aplicar esto en producción, asegurate de tener un proceso claro para usuarios que necesiten USB por trabajo. La excepción debe ser controlada, no la regla.</div>
+
+      <h2>3. Restricción de ejecución de PowerShell</h2>
+      <p>PowerShell es una herramienta increíble para administración, pero también es el vector favorito de los atacantes. Lo mínimo:</p>
+      <pre><code>Computer Config → Policies → Admin Templates
+  → Windows Components → Windows PowerShell
+  → Turn on Script Execution: Allow only signed scripts</code></pre>
+      <p>Complementar con el módulo de logging para tener registro de todo lo que se ejecuta.</p>
+
+      <h2>4. Auditoría de eventos críticos</h2>
+      <p>Sin logs no hay forense posible. Las auditorías que siempre habilito:</p>
+      <ul>
+        <li>Logon/Logoff: éxitos y fallos</li>
+        <li>Account Management: creación y eliminación de cuentas</li>
+        <li>Policy Change: cambios en políticas de seguridad</li>
+        <li>Privilege Use: uso de privilegios elevados</li>
+        <li>Object Access: acceso a archivos y carpetas sensibles</li>
+      </ul>
+
+      <h2>5. Deshabilitar autorun en unidades removibles</h2>
+      <pre><code>Computer Config → Policies → Admin Templates
+  → Windows Components → AutoPlay Policies
+  → Turn off AutoPlay: Enabled (All Drives)</code></pre>
+
+      <h2>6. Pantalla de bloqueo con timeout</h2>
+      <p>Simple pero ignorado constantemente. Inactividad de 10 minutos → bloqueo automático:</p>
+      <pre><code>User Config → Policies → Admin Templates
+  → Control Panel → Personalization
+  → Screen saver timeout: 600 seconds
+  → Password protect the screen saver: Enabled</code></pre>
+
+      <div class="callout"><strong>Consejo de implementación:</strong> nunca apliques GPOs directamente al dominio raíz la primera vez. Creá una OU de prueba, aplicá la GPO ahí, testea con usuarios piloto y después desplegás más amplio. Un error en producción puede bloquearte a todos los usuarios.</div>
+    `
+  }
+};
+
+function showHome() {
+  document.getElementById('view-home').className = 'view active';
+  document.getElementById('view-post').className = 'view';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function scrollToPosts() {
+  showHome();
+  setTimeout(() => {
+    document.getElementById('posts-section').scrollIntoView({ behavior: 'smooth' });
+  }, 100);
+}
+
+function showPost(id) {
+  const post = posts[id];
+  if (!post) return;
+
+  const content = document.getElementById('post-content');
+  content.innerHTML = `
+    <div class="post-detail">
+      <div class="detail-header">
+        <div class="detail-meta">
+          <span class="cat ${post.cat}">${post.catLabel}</span>
+          <span class="post-date">${post.date} · ${post.readTime} de lectura</span>
+        </div>
+        <h1 class="detail-title">${post.title}</h1>
+        <div class="detail-byline">por Mariano Clivio · IT Infrastructure @ Reportv</div>
+      </div>
+      <blockquote class="detail-lead">${post.lead}</blockquote>
+      <div class="article">${post.body}</div>
+    </div>
+  `;
+
+  document.getElementById('view-home').className = 'view';
+  document.getElementById('view-post').className = 'view active';
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+</script>
+</body>
+</html>
